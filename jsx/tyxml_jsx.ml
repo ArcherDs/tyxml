@@ -179,6 +179,7 @@ let is_homemade_component lid = match lid with
 let mk_component ~lang ~loc f attrs children =
   let children = match children with
     | [] -> []
+    | [child] -> [Labelled "children", Common.wrap_value lang loc child]
     | l -> [Labelled "children",  Common.list_wrap_value lang loc l]
   in
   let mk_attr ((_ns, name), v) =
