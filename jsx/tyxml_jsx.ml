@@ -54,9 +54,11 @@ let make_attr_name name =
   in
   name
 
-let js_attr name =
-  (* From https://github.com/reasonml/reason-react/blob/795dc08e2e66a34a7bbd515bd457b5a70b7d57f7/src/ReactDOM.re#L399-L568 *)
+let is_reason_react_attr name =
   let attrs = [
+    "key";
+    "ref";
+    (* From https://github.com/reasonml/reason-react/blob/795dc08e2e66a34a7bbd515bd457b5a70b7d57f7/src/ReactDOM.re#L399-L568 *)
     "onAbort";
     "onAnimationEnd";
     "onAnimationIteration";
@@ -206,7 +208,7 @@ and extract_attr ~lang = function
   (* Ignore last unit argument as tyxml api is pure *)
   | Nolabel, [%expr ()] -> None
   | Labelled "children", _ -> None
-  | Labelled name, _ when js_attr name-> None
+  | Labelled name, _ when is_reason_react_attr name-> None
   | Labelled name, value ->
     Some (extract_attr_value ~lang name value)
   | Nolabel, e ->
