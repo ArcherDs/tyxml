@@ -54,6 +54,90 @@ let make_attr_name name =
   in
   name
 
+let js_attr name =
+  (* From https://github.com/reasonml/reason-react/blob/795dc08e2e66a34a7bbd515bd457b5a70b7d57f7/src/ReactDOM.re#L399-L568 *)
+  let attrs = [
+    "onAbort";
+    "onAnimationEnd";
+    "onAnimationIteration";
+    "onAnimationStart";
+    "onBlur";
+    "onCanPlay";
+    "onCanPlayThrough";
+    "onChange";
+    "onClick";
+    "onCompositionEnd";
+    "onCompositionStart";
+    "onCompositionUpdate";
+    "onContextMenu";
+    "onCopy";
+    "onCut";
+    "onDoubleClick";
+    "onDrag";
+    "onDragEnd";
+    "onDragEnter";
+    "onDragExit";
+    "onDragLeave";
+    "onDragOver";
+    "onDragStart";
+    "onDrop";
+    "onDurationChange";
+    "onEmptied";
+    "onEncrypetd";
+    "onEnded";
+    "onError";
+    "onFocus";
+    "onGotPointerCapture";
+    "onInput";
+    "onInvalid";
+    "onKeyDown";
+    "onKeyPress";
+    "onKeyUp";
+    "onLoad";
+    "onLoadStart";
+    "onLoadedData";
+    "onLoadedMetadata";
+    "onLostPointerCapture";
+    "onMouseDown";
+    "onMouseEnter";
+    "onMouseLeave";
+    "onMouseMove";
+    "onMouseOut";
+    "onMouseOver";
+    "onMouseUp";
+    "onPaste";
+    "onPause";
+    "onPlay";
+    "onPlaying";
+    "onPointerCancel";
+    "onPointerDown";
+    "onPointerEnter";
+    "onPointerLeave";
+    "onPointerMove";
+    "onPointerOut";
+    "onPointerOver";
+    "onPointerUp";
+    "onProgress";
+    "onRateChange";
+    "onScroll";
+    "onSeeked";
+    "onSeeking";
+    "onSelect";
+    "onStalled";
+    "onSubmit";
+    "onSuspend";
+    "onTimeUpdate";
+    "onTouchCancel";
+    "onTouchEnd";
+    "onTouchMove";
+    "onTouchStart";
+    "onTransitionEnd";
+    "onVolumeChange";
+    "onWaiting";
+    "onWheel"
+  ] in
+  List.mem name attrs
+
 open Common
 
 let rec filter_map f = function
@@ -122,6 +206,7 @@ and extract_attr ~lang = function
   (* Ignore last unit argument as tyxml api is pure *)
   | Nolabel, [%expr ()] -> None
   | Labelled "children", _ -> None
+  | Labelled name, _ when js_attr name-> None
   | Labelled name, value ->
     Some (extract_attr_value ~lang name value)
   | Nolabel, e ->
